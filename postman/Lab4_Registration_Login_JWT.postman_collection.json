@@ -1,0 +1,243 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Lab 4 - Registration, Login and JWT (EGeethashree - 252U1R3106)",
+    "description": "Comprehensive Postman API Collection for testing user registration, login with hashed passwords, JWT generation, and protected routes in Node.js & Express.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/",
+          "host": ["{{base_url}}"],
+          "path": [""]
+        },
+        "description": "Check if server and database are healthy."
+      },
+      "response": []
+    },
+    {
+      "name": "1. POST Register - Success",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"geethashree\",\n  \"name\": \"EGeethashree\",\n  \"password\": \"securePass123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/register",
+          "host": ["{{base_url}}"],
+          "path": ["register"]
+        },
+        "description": "Registers a new user. Password is automatically hashed using bcrypt."
+      },
+      "response": []
+    },
+    {
+      "name": "2. POST Register - Duplicate Username (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"geethashree\",\n  \"name\": \"EGeethashree Duplicate\",\n  \"password\": \"anotherPass456\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/register",
+          "host": ["{{base_url}}"],
+          "path": ["register"]
+        },
+        "description": "Rejects duplicate username registration with HTTP 400."
+      },
+      "response": []
+    },
+    {
+      "name": "3. POST Register - Missing Fields Validation (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"incomplete_user\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/register",
+          "host": ["{{base_url}}"],
+          "path": ["register"]
+        },
+        "description": "Validates request payload; rejects incomplete inputs with HTTP 400."
+      },
+      "response": []
+    },
+    {
+      "name": "4. POST Login - Success (Generates JWT)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.jwt_token) {",
+              "    pm.collectionVariables.set('jwt_token', jsonData.jwt_token);",
+              "    console.log('JWT Token successfully set in collection variable:', jsonData.jwt_token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"geethashree\",\n  \"password\": \"securePass123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": ["{{base_url}}"],
+          "path": ["login"]
+        },
+        "description": "Authenticates valid credentials, compares bcrypt hash, and returns JWT token."
+      },
+      "response": []
+    },
+    {
+      "name": "5. POST Login - Unknown User (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"unknown_student\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": ["{{base_url}}"],
+          "path": ["login"]
+        },
+        "description": "Rejects login attempts for non-existent users with HTTP 400 'Invalid user'."
+      },
+      "response": []
+    },
+    {
+      "name": "6. POST Login - Wrong Password (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"geethashree\",\n  \"password\": \"wrong_password_99\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": ["{{base_url}}"],
+          "path": ["login"]
+        },
+        "description": "Rejects login attempts with mismatched passwords with HTTP 400 'Invalid password'."
+      },
+      "response": []
+    },
+    {
+      "name": "7. GET Profile - Authenticated Success (200)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/profile",
+          "host": ["{{base_url}}"],
+          "path": ["profile"]
+        },
+        "description": "Accesses protected route using Bearer JWT token. Returns username and name only."
+      },
+      "response": []
+    },
+    {
+      "name": "8. GET Profile - Missing Authorization Header (401)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/profile",
+          "host": ["{{base_url}}"],
+          "path": ["profile"]
+        },
+        "description": "Protected route rejects request when Authorization header is omitted (HTTP 401)."
+      },
+      "response": []
+    },
+    {
+      "name": "9. GET Profile - Invalid / Tampered Token (401)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer this_is_an_invalid_tampered_token",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/profile",
+          "host": ["{{base_url}}"],
+          "path": ["profile"]
+        },
+        "description": "Protected route rejects invalid or manipulated JWT tokens with HTTP 401."
+      },
+      "response": []
+    }
+  ]
+}

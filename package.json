@@ -1,0 +1,30 @@
+{
+  "name": "lab-4-registration-login-jwt",
+  "version": "1.0.0",
+  "description": "Lab 4: User Registration, Login and JWT Authentication using Node.js, Express, SQLite and bcrypt",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test/test_suite.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "jwt",
+    "bcrypt",
+    "sqlite",
+    "authentication"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1"
+  }
+}
