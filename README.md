@@ -8,7 +8,7 @@
 - **Student Name:** `EGeethashree`
 - **Registration Number:** `252U1R3106`
 - **Section / Batch:** `CSEDS-2B`
-- **Live Deployment Link:** `[ENTER_LIVE_DEPLOYMENT_URL_HERE]` *(e.g., https://lab4-auth-api.onrender.com or 'Not applicable' if running strictly locally)*
+- **Live Deployment Link:** `https://lab-4-nhrq.onrender.com` *(e.g., https://lab4-auth-api.onrender.com or 'Not applicable' if running strictly locally)*
 
 ---
 
